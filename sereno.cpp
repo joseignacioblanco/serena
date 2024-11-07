@@ -6,29 +6,21 @@
 
 #define SS_PIN 5       // Pin de selección para el módulo RC522
 #define RST_PIN 22     // Pin de reinicio para el módulo RC522
-#define RELAY1_PIN 25  // Pin para el relé 1 (puerta 1)
-#define RELAY2_PIN 26  // Pin para el relé 2 (puerta 2)
 #define SD_CS_PIN 13   // Pin de selección para la tarjeta SD
 
 const char* ssid = "TuSSID"; // Reemplaza con tu red Wi-Fi
 const char* password = "TuPassword"; // Reemplaza con tu contraseña Wi-Fi
-const char* fileURL = "http://example.com/autorizadas.txt"; // URL del archivo
+const char* fileURL = "https://drive.google.com/uc?export=download&id=1A2B3C4D5E6F7G8H9"; // Reemplaza con tu enlace de descarga directa
 
 MFRC522 rfid(SS_PIN, RST_PIN);
-File sdFile;
-String authorizedCards[50]; // Arreglo para almacenar tarjetas autorizadas
-int cardCount = 0;
+String masterCardUID = "12ab34cd56"; // UID de la llave RFID maestra
 
 void setup() {
   Serial.begin(115200);
   SPI.begin();
   rfid.PCD_Init();
-  pinMode(RELAY1_PIN, OUTPUT);
-  pinMode(RELAY2_PIN, OUTPUT);
-  digitalWrite(RELAY1_PIN, LOW);
-  digitalWrite(RELAY2_PIN, LOW);
-
-  // Conectar a Wi-Fi
+  
+  // Conexión Wi-Fi
   WiFi.begin(ssid, password);
   Serial.print("Conectando a Wi-Fi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -44,12 +36,6 @@ void setup() {
   }
   Serial.println("Tarjeta SD inicializada correctamente");
 
-  // Descargar y actualizar la lista de tarjetas autorizadas desde la nube
-  updateAuthorizedListFromCloud();
-
-  // Cargar tarjetas autorizadas desde el archivo
-  loadAuthorizedCards();
-
   Serial.println("Sistema de Control de Acceso Iniciado");
 }
 
@@ -64,42 +50,44 @@ void loop() {
     return;
   }
 
-  // Mostrar UID de la tarjeta leída
-  Serial.print("UID de la tarjeta: ");
+  // Obtener el UID de la tarjeta leída
+  String cardID = getCardUID();
+
+  // Verificar si es la tarjeta maestra
+  if (cardID.equalsIgnoreCase(masterCardUID)) {
+    Serial.println("Tarjeta maestra detectada. Actualizando la lista desde Google Drive...");
+    updateAuthorizedListFromCloud();
+  } else {
+    Serial.println("Tarjeta leída: " + cardID);
+    // Aquí puedes agregar la lógica para validar y autorizar acceso si no es la tarjeta maestra
+  }
+
+  delay(1000); // Breve retardo para evitar múltiples lecturas seguidas
+  rfid.PICC_HaltA();
+}
+
+String getCardUID() {
   String cardID = "";
   for (byte i = 0; i < rfid.uid.size; i++) {
-    Serial.print(rfid.uid.uidByte[i] < 0x10 ? " 0" : " ");
-    Serial.print(rfid.uid.uidByte[i], HEX);
     cardID += String(rfid.uid.uidByte[i], HEX);
   }
-  Serial.println();
-
-  // Validar el acceso
-  if (isAuthorized(cardID)) {
-    Serial.println("Acceso autorizado");
-    openDoor(RELAY1_PIN);
-  } else {
-    Serial.println("Acceso denegado");
-  }
-
-  delay(1000);
-  rfid.PICC_HaltA();
+  return cardID;
 }
 
 void updateAuthorizedListFromCloud() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    http.begin(fileURL);
+    http.begin(fileURL); // Enlace de descarga directa de Google Drive
     int httpResponseCode = http.GET();
 
     if (httpResponseCode == 200) {
       String payload = http.getString();
-      Serial.println("Archivo descargado desde la nube");
+      Serial.println("Archivo descargado desde Google Drive");
 
       // Guardar el archivo en la tarjeta SD
-      sdFile = SD.open("/autorizadas.txt", FILE_WRITE);
+      File sdFile = SD.open("/autorizadas.txt", FILE_WRITE);
       if (sdFile) {
-        sdFile.println(payload); // Escribe el contenido descargado en el archivo
+        sdFile.println(payload);
         sdFile.close();
         Serial.println("Archivo actualizado en la tarjeta SD");
       } else {
@@ -114,39 +102,4 @@ void updateAuthorizedListFromCloud() {
   } else {
     Serial.println("Wi-Fi no conectado");
   }
-}
-
-void loadAuthorizedCards() {
-  sdFile = SD.open("/autorizadas.txt");
-  if (!sdFile) {
-    Serial.println("No se pudo abrir el archivo de tarjetas autorizadas");
-    return;
-  }
-
-  Serial.println("Cargando tarjetas autorizadas...");
-  while (sdFile.available() && cardCount < 50) {
-    String card = sdFile.readStringUntil('\n');
-    card.trim();
-    if (card.length() > 0) {
-      authorizedCards[cardCount] = card;
-      cardCount++;
-      Serial.println("Tarjeta cargada: " + card);
-    }
-  }
-  sdFile.close();
-}
-
-bool isAuthorized(String cardID) {
-  for (int i = 0; i < cardCount; i++) {
-    if (cardID.equalsIgnoreCase(authorizedCards[i])) {
-      return true;
-    }
-  }
-  return false;
-}
-
-void openDoor(int relayPin) {
-  digitalWrite(relayPin, HIGH);
-  delay(5000);
-  digitalWrite(relayPin, LOW);
 }
