@@ -58,8 +58,14 @@ void loop() {
     Serial.println("Tarjeta maestra detectada. Actualizando la lista desde Google Drive...");
     updateAuthorizedListFromCloud();
   } else {
-    Serial.println("Tarjeta leída: " + cardID);
-    // Aquí puedes agregar la lógica para validar y autorizar acceso si no es la tarjeta maestra
+    // Validar la tarjeta en la lista de autorizadas
+    if (isCardAuthorized(cardID)) {
+      Serial.println("Acceso permitido para la tarjeta: " + cardID);
+      // Aquí puedes agregar la lógica para activar la cerradura o el acceso
+    } else {
+      Serial.println("Acceso denegado para la tarjeta: " + cardID);
+      // Aquí puedes agregar la lógica para una alarma de acceso denegado, etc.
+    }
   }
 
   delay(1000); // Breve retardo para evitar múltiples lecturas seguidas
@@ -102,4 +108,25 @@ void updateAuthorizedListFromCloud() {
   } else {
     Serial.println("Wi-Fi no conectado");
   }
+}
+
+bool isCardAuthorized(String cardID) {
+  File sdFile = SD.open("/autorizadas.txt", FILE_READ);
+  if (!sdFile) {
+    Serial.println("Error al abrir autorizadas.txt");
+    return false;
+  }
+
+  // Leer cada línea del archivo para buscar el cardID
+  while (sdFile.available()) {
+    String authorizedID = sdFile.readStringUntil('\n');
+    authorizedID.trim(); // Eliminar espacios en blanco o saltos de línea
+    if (cardID.equalsIgnoreCase(authorizedID)) {
+      sdFile.close();
+      return true; // Tarjeta encontrada en la lista de autorizadas
+    }
+  }
+
+  sdFile.close();
+  return false; // Tarjeta no encontrada en la lista de autorizadas
 }
