@@ -6,6 +6,10 @@
 
 #Evidentemente los comentarios en python se hacen con #
 
+#como e el tema para que quede como archivo ejecutable?
+# con el shebang #! /usr/bin/python3 pero esto es solo para linux.  en windors ya salen ejecutables.
+# como yo lo hago en la rrasberri, entonces va el shebang y todo
+
 # Aqui pone todas las bibliotecas de python que va a usar.
 # se usa: from <espacio de nombres> import <bibliotecas> (verificar si es asi lo correcto)
 
@@ -118,7 +122,7 @@ def main():
             GPIO.cleanup()
 
 
-
+#esto es lo del tema que paiton necesita un punto de entrada por mein y no se por que se lo indica asi.
 if __name__ == "__main__":
     connect_to_wifi()
     main()
