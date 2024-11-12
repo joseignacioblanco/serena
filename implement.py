@@ -18,7 +18,7 @@ def is_card_authorized(card_id):
 def activate_relay():
     GPIO.output(RELAY_PIN, GPIO.HIGH)
     print("Relé activado - Abriendo puerta")
-    time.sleep(5)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
+    time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
     GPIO.output(RELAY_PIN, GPIO.LOW)
     print("Relé desactivado - Cerrando puerta")
 
