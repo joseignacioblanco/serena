@@ -30,12 +30,15 @@ import time # para manejar cosas que tienen que ver con horarios, dias, tiempo, 
 
 
 # Configuración de pines GPIO y RFID
+
 GPIO.setmode(GPIO.BOARD) #para que tome la numeracion de la placa y no de la broadcom.
+
 lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
 
 # Configuración del relé (deberian ser dos puertas no una sola vidrio y reja)
 
 RELAY_PIN = 5 # configura el pin 18 para uno de los reles que van a abrir la puerta
+
 GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
 
 GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
@@ -54,6 +57,8 @@ SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
 
 
 def main():
+    #configuracion_setup()
+
     print("Sistema de Control de Acceso Iniciado.")
     while True:
         try:
@@ -64,7 +69,7 @@ def main():
 
             if is_card_authorized(card_id):
                 print("Acceso permitido.")
-#                activate_relay()  # Activar el relé para abrir la puerta
+                activate_relay()  # Activar el relé para abrir la puerta
             else:
                 print("Acceso denegado.")
                 # Aquí puedes agregar lógica para alarmas, etc.
@@ -80,11 +85,27 @@ def main():
 
 
 def activate_relay():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(RELAY_PIN, GPIO.OUT)
     GPIO.output(RELAY_PIN, GPIO.HIGH)
     print("Relé activado - Abriendo puerta")
     time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
     GPIO.output(RELAY_PIN, GPIO.LOW)
     print("Relé desactivado - Cerrando puerta")
+
+
+'''def configuracion_setup():
+
+    GPIO.setmode(GPIO.BOARD) #para que tome la numeracion de la placa y no de la broadcom.
+    #lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
+
+    # Configuración del relé (deberian ser dos puertas no una sola vidrio y reja)
+
+    RELAY_PIN = 5 # configura el pin 18 para uno de los reles que van a abrir la puerta
+    GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
+
+    GPIO.output(RELAY_PIN, GPIO.LOW)
+    print("configurado")'''
 
 
 
@@ -99,7 +120,10 @@ def is_card_authorized(card_id):
 
 
 
+
+
+
+
 #esto es lo del tema que paiton necesita un punto de entrada por mein y no se por que se lo indica asi.
 if __name__ == "__main__":
-#    connect_to_wifi()
     main()
