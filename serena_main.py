@@ -34,6 +34,7 @@ GPIO.setmode(GPIO.BOARD) #para que tome la numeracion de la placa y no de la bro
 lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
 
 # Configuración del relé (deberian ser dos puertas no una sola vidrio y reja)
+
 RELAY_PIN = 5 # configura el pin 18 para uno de los reles que van a abrir la puerta
 GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
 GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
@@ -43,7 +44,7 @@ GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deber
 #FILE_URL = "https://drive.google.com/uc?export=download&id=1A2B3C4D5E6F7G8H9"  # Reemplaza con tu enlace de descarga (esto veremos como lo implemento.  capaz que mejor con una web o si, un drive. o ver si se puede de gitjab..)
 
 
-SD_FILE_PATH = "/home/pi4/Documentos/serena/autorized_cards.txt"  # Ruta donde se almacena el archivo en la Raspberry Pi (este es el archivo donde estan los id  de las tarjetas con la info de cada usuario: ver como vincular cada id con persona. va tener que parsear el id o usar un archivo binario y no txt)
+#SD_FILE_PATH = "/home/pi4/Documentos/serena/autorized_cards.txt"  # Ruta donde se almacena el archivo en la Raspberry Pi (este es el archivo donde estan los id  de las tarjetas con la info de cada usuario: ver como vincular cada id con persona. va tener que parsear el id o usar un archivo binario y no txt)
 
 #---------------------------------------------------------------------------------------------------------------
 
@@ -74,6 +75,17 @@ def main():
             break
         finally:
             GPIO.cleanup()
+
+
+
+def activate_relay():
+    GPIO.output(RELAY_PIN, GPIO.HIGH)
+    print("Relé activado - Abriendo puerta")
+    time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
+    GPIO.output(RELAY_PIN, GPIO.LOW)
+    print("Relé desactivado - Cerrando puerta")
+
+
 
 
 #esto es lo del tema que paiton necesita un punto de entrada por mein y no se por que se lo indica asi.
