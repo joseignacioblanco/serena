@@ -1,5 +1,5 @@
 #! /usr/bin/python3
-# Este es el shebang para que se ejecute como script de python.
+# Este es el shebang para que se ejecute como script de python. no puede haber nada mas en a primera linea sino no anda.
 
 #------------------------------ PROYECTO SERENA 9/NOV/2024 --------------------------
 # AUTOR: JOSE BLANCO
@@ -57,8 +57,8 @@ def main():
     while True:
         try:
             print("Esperando una tarjeta...")
-            card_id, text = lector_1.read()
-            card_id = str(card_id).strip()
+            card_id, text = lector_1.read() #asignacion multiple
+            card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
             print(f"Tarjeta leída: {card_id}")
 
             if is_card_authorized(card_id):
