@@ -24,7 +24,7 @@ from mfrc522 import SimpleMFRC522 # maneja el modulo rfid.
 #import requests # supongo que es algo para macaniar con internet y las webs.
 #import os # manipulla archivos.
 import time # para manejar cosas que tienen que ver con horarios, dias, tiempo, etc
-from implement import * #importa todas las funciones.
+#from implement import * #importa todas las funciones.
 
 #------------------------------------------------------------------------------------------
 
@@ -37,14 +37,15 @@ lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
 
 RELAY_PIN = 5 # configura el pin 18 para uno de los reles que van a abrir la puerta
 GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
+
 GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
 
 # Configuración del URL de Google Drive
 
 #FILE_URL = "https://drive.google.com/uc?export=download&id=1A2B3C4D5E6F7G8H9"  # Reemplaza con tu enlace de descarga (esto veremos como lo implemento.  capaz que mejor con una web o si, un drive. o ver si se puede de gitjab..)
 
-
-#SD_FILE_PATH = "/home/pi4/Documentos/serena/autorized_cards.txt"  # Ruta donde se almacena el archivo en la Raspberry Pi (este es el archivo donde estan los id  de las tarjetas con la info de cada usuario: ver como vincular cada id con persona. va tener que parsear el id o usar un archivo binario y no txt)
+SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
+#SD_FILE_PATH = "/home/pi/Documentos/serena/autorized_cards.txt"  # Ruta donde se almacena el archivo en la Raspberry Pi (este es el archivo donde estan los id  de las tarjetas con la info de cada usuario: ver como vincular cada id con persona. va tener que parsear el id o usar un archivo binario y no txt)
 
 #---------------------------------------------------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ def main():
 
             if is_card_authorized(card_id):
                 print("Acceso permitido.")
-                activate_relay()  # Activar el relé para abrir la puerta
+#                activate_relay()  # Activar el relé para abrir la puerta
             else:
                 print("Acceso denegado.")
                 # Aquí puedes agregar lógica para alarmas, etc.
@@ -85,6 +86,16 @@ def activate_relay():
     GPIO.output(RELAY_PIN, GPIO.LOW)
     print("Relé desactivado - Cerrando puerta")
 
+
+
+def is_card_authorized(card_id):
+    try:
+        with open(SD_FILE_PATH, 'r') as f:  #el with lo usa para manejar los archivos y el as f  le da otro nombre para referenciarlo en adelante
+            authorized_cards = f.read().splitlines()  #el splitlines separa linea por linea y parece que mete todo en una tupla
+            return card_id in authorized_cards   #se fija si en esa tupla esta la tarjeta que presento que es car aidí
+    except FileNotFoundError:
+        print("El archivo de autorizaciones no se encuentra.")
+        return False
 
 
 
