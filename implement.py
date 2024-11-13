@@ -67,7 +67,7 @@ def registrar_acceso(id_tarjeta, archivo_vinculacion, archivo_log):
 
 def cargar_ids_desde_csv(archivo_csv):
   
-    """
+    """ funcion para no tener que usar el autorizado.txt sino un vinculacion.csv
     Carga los IDs de un archivo CSV, asumiendo que el ID está en la primera columna.
     Args:
     archivo_csv (str): Ruta al archivo CSV.

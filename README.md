@@ -1,5 +1,5 @@
 # serena
-practica de codigo en c y cpp
+practica de codigo python
 
 
 
