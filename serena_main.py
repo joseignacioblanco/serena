@@ -13,7 +13,7 @@
 import app
 
 def main():
-    app.setup()
+    print("Sistema de Control de Acceso Iniciado.")
     app.loop()
 
 

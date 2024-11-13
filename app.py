@@ -1,14 +1,10 @@
 import RPi.GPIO as GPIO
+import time
 from mfrc522 import SimpleMFRC522
 from implement import *
-import time
 
-RELAY_1_PIN = 5
 
 lector_1 = SimpleMFRC522()
-
-def setup():
-    print("Sistema de Control de Acceso Iniciado.")
 
 
 def loop():
