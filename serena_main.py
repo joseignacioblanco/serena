@@ -31,7 +31,7 @@ import time # para manejar cosas que tienen que ver con horarios, dias, tiempo, 
 
 # Configuración de pines GPIO y RFID
 
-GPIO.setmode(GPIO.BOARD) #para que tome la numeracion de la placa y no de la broadcom.
+#GPIO.setmode(GPIO.BOARD) #para que tome la numeracion de la placa y no de la broadcom.
 
 lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
 
@@ -39,9 +39,9 @@ lector_1 = SimpleMFRC522() # no se que carajos configura de la placa modulo rfid
 
 RELAY_PIN = 5 # configura el pin 18 para uno de los reles que van a abrir la puerta
 
-GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
+#GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
 
-GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+#GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
 
 # Configuración del URL de Google Drive
 
@@ -62,6 +62,10 @@ def main():
     print("Sistema de Control de Acceso Iniciado.")
     while True:
         try:
+            GPIO.setmode(GPIO.BOARD)
+            GPIO.setup(RELAY_PIN, GPIO.OUT) # configura como salida.
+            GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+
             print("Esperando una tarjeta...")
             card_id, text = lector_1.read() #asignacion multiple
             card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
@@ -80,7 +84,9 @@ def main():
             print("\nSaliendo del sistema.")
             break
         finally:
-            GPIO.cleanup()
+            print("mondongo")
+            GPIO.cleanup() #si lo dejo puesto, me deja el gpio sin asignar hasta la proxima tarjeta
+
 
 
 
