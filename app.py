@@ -3,15 +3,14 @@ from mfrc522 import SimpleMFRC522
 from implement import *
 import time
 
-lector_1 = SimpleMFRC522()
-
-
 RELAY_1_PIN = 5
+
+lector_1 = SimpleMFRC522()
 
 def setup():
     print("Sistema de Control de Acceso Iniciado.")
-    RELAY_1_PIN = 5
-    lector_1 = SimpleMFRC522()
+    #RELAY_1_PIN = 5
+    #lector_1 = SimpleMFRC522()
 
 
 
@@ -45,5 +44,4 @@ def loop():
             print("\nSaliendo del sistema.")
             break
         finally:
-            print("mondongo")
             GPIO.cleanup()

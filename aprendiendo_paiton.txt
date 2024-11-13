@@ -8,4 +8,6 @@ fijarse de dar bien la ruta del archivo sino no va andar el chmod.
 from <espacio de nombres> import <bibliotecas> para importar todo el modulo
 uso el operador * o sino impport modulo y despues llamo a las funciones
 con el operador "." moduo1.saluda()
-4.
+4. Parece que lo de importar solo trae los nombres de las funciones, las constantes
+simbolicas y las variables, no se copian al codigo. Pues no funciona como un header de c.
+5. 
