@@ -1,5 +1,17 @@
+import RPi.GPIO as GPIO
+from mfrc522 import SimpleMFRC522
+from implement import *
+import time
+
+lector_1 = SimpleMFRC522()
+
+
+RELAY_1_PIN = 5
+
 def setup():
     print("Sistema de Control de Acceso Iniciado.")
+    RELAY_1_PIN = 5
+    lector_1 = SimpleMFRC522()
 
 
 
@@ -10,14 +22,14 @@ def loop():
             GPIO.setmode(GPIO.BOARD) # Configura el modo numeracion de placa.
             GPIO.setup(RELAY_1_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
             GPIO.output(RELAY_1_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
-            
+
             #lee la tarjeta:
 
             print("Esperando una tarjeta...")
             card_id, text = lector_1.read() #asignacion multiple, a text nunca lo usa.
             card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
             print(f"Tarjeta leída: {card_id}") #print con formato.
-            
+
             #se fija si esta autorizada
 
             if is_card_authorized(card_id):
