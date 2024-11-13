@@ -1,10 +1,11 @@
 import RPi.GPIO as GPIO
 import time
 import datetime
-
+import csv
 
 RELAY_1_PIN = 5
 SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
+VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
 
 
 def activate_relay():
@@ -21,7 +22,8 @@ def activate_relay():
 def is_card_authorized(card_id):
     try:
         with open(SD_FILE_PATH, 'r') as f:  #el with lo usa para manejar los archivos y el as f  le da otro nombre para referenciarlo en adelante
-            authorized_cards = f.read().splitlines()  #el splitlines separa linea por linea y parece que mete todo en una tupla
+            #authorized_cards = f.read().splitlines()  #el splitlines separa linea por linea y parece que mete todo en una tupla
+            authorized_cards = cargar_ids_desde_csv(VINCULATION_FILE)  # Reemplaza 'tarjetas.csv' por tu archivo
             return card_id in authorized_cards   #se fija si en esa tupla esta la tarjeta que presento que es car aidí
     except FileNotFoundError:
         print("El archivo de autorizaciones no se encuentra.")
@@ -59,3 +61,24 @@ def registrar_acceso(id_tarjeta, archivo_vinculacion, archivo_log):
   # Escribir el registro en el archivo de log
   with open(archivo_log, 'a') as f:
     f.write(registro)
+    
+    
+    
+    def cargar_ids_desde_csv(archivo_csv):
+    """Carga los IDs de un archivo CSV, asumiendo que el ID está en la primera columna.
+
+    Args:
+        archivo_csv (str): Ruta al archivo CSV.
+
+    Returns:
+        tuple: Tupla con todos los IDs cargados.
+    """
+
+    ids = []
+    with open(archivo_csv, 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            # Extraemos el primer elemento de cada fila (el ID)
+            id_tarjeta = row[0]
+            ids.append(id_tarjeta)
+    return tuple(ids)

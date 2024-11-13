@@ -20,7 +20,6 @@ def loop():
 
             print("Esperando una tarjeta...")
             card_id, text = lector_1.read() #asignacion multiple, a text lo usa para parsear porque sino mete basura en id.
-            #registrar_acceso(card_id, VINCULATION_FILE, REGISTER_FILE)
             card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
             registrar_acceso(card_id, VINCULATION_FILE, REGISTER_FILE)
             print(f"Tarjeta leída: {card_id}") #print con formato.
