@@ -3,7 +3,7 @@ import time
 from mfrc522 import SimpleMFRC522
 from implement import *
 
-VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
+#VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
 REGISTER_FILE = "/home/pi/Documents/serena/log_accesos.csv"
 
 lector_1 = SimpleMFRC522()
