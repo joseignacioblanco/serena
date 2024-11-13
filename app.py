@@ -17,7 +17,8 @@ def loop():
             #lee la tarjeta:
 
             print("Esperando una tarjeta...")
-            card_id, text = lector_1.read() #asignacion multiple, a text nunca lo usa.
+            card_id = lector_1.read() #asignacion multiple, a text nunca lo usa.
+            registrar_acceso(id_tarjeta, "vinculacion.csv", "log_accesos.txt")
             card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
             print(f"Tarjeta leída: {card_id}") #print con formato.
 
