@@ -19,26 +19,24 @@ import time # para manejar cosas que tienen que ver con horarios, dias, tiempo, 
 
 #------------------------------------------------------------------------------------------
 
-# Configuración de pines GPIO y RFID
-
 lector_1 = SimpleMFRC522() # Crea una instancia de la clase que maneja la placa RC522.
-RELAY_PIN = 5 #Constante simbolica, despues debo ponerla en un header o algo asi..
+RELAY_1_PIN = 5 #Constante simbolica, despues debo ponerla en un header o algo asi..
 SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"# Ruta donde se almacena el archivo en la Raspberry Pi (este es el archivo donde estan los id  de las tarjetas con la info de cada usuario: ver como vincular cada id con persona. va tener que parsear el id o usar un archivo binario y no txt)
-
-#---------------------------------------------------------------------------------------------------------------
 
 # Funcion principal de entrada a la aplicación
 
 def main():
-    #configuracion_setup()
-    #loop()
+    
+    setup()
+    
+    loop()
 
-    print("Sistema de Control de Acceso Iniciado.")
-    while True:
+    #print("Sistema de Control de Acceso Iniciado.")
+    '''while True:
         try:
             GPIO.setmode(GPIO.BOARD) # Configura el modo numeracion de placa.
-            GPIO.setup(RELAY_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
-            GPIO.output(RELAY_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+            GPIO.setup(RELAY_1_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
+            GPIO.output(RELAY_1_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
             
             #lee la tarjeta:
 
@@ -63,19 +61,60 @@ def main():
             break
         finally:
             print("mondongo")
-            GPIO.cleanup() #si lo dejo puesto, me deja el gpio sin asignar hasta la proxima tarjeta
+            GPIO.cleanup() '''
 
 
 #todo este funcionaje deberia ponerlo en distintos archivos modulos.
 
 
+
+def setup():
+    print("Sistema de Control de Acceso Iniciado.")
+
+
+
+
+def loop():
+    while True:
+        try:
+            GPIO.setmode(GPIO.BOARD) # Configura el modo numeracion de placa.
+            GPIO.setup(RELAY_1_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
+            GPIO.output(RELAY_1_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+            
+            #lee la tarjeta:
+
+            print("Esperando una tarjeta...")
+            card_id, text = lector_1.read() #asignacion multiple, a text nunca lo usa.
+            card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
+            print(f"Tarjeta leída: {card_id}") #print con formato.
+            
+            #se fija si esta autorizada
+
+            if is_card_authorized(card_id):
+                print("Acceso permitido.")
+                activate_relay()  # Activar el relé para abrir la puerta
+            else:
+                print("Acceso denegado.")
+                # Aquí puedes agregar lógica para alarmas, etc.
+
+            time.sleep(1)  # Retardo para evitar lecturas múltiples rápidas
+
+        except KeyboardInterrupt:
+            print("\nSaliendo del sistema.")
+            break
+        finally:
+            print("mondongo")
+            GPIO.cleanup()
+            
+            
+
 def activate_relay():
     GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(RELAY_PIN, GPIO.OUT)
-    GPIO.output(RELAY_PIN, GPIO.HIGH)
+    GPIO.setup(RELAY_1_PIN, GPIO.OUT)
+    GPIO.output(RELAY_1_PIN, GPIO.HIGH)
     print("Relé activado - Abriendo puerta")
     time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
-    GPIO.output(RELAY_PIN, GPIO.LOW)
+    GPIO.output(RELAY_1_PIN, GPIO.LOW)
     print("Relé desactivado - Cerrando puerta")
 
 
