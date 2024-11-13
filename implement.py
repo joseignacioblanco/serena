@@ -1,8 +1,12 @@
-#Archivo de implemantacion de Funciones y tareas.
+def activate_relay():
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(RELAY_1_PIN, GPIO.OUT)
+    GPIO.output(RELAY_1_PIN, GPIO.HIGH)
+    print("Relé activado - Abriendo puerta")
+    time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
+    GPIO.output(RELAY_1_PIN, GPIO.LOW)
+    print("Relé desactivado - Cerrando puerta")
 
-SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
-
-#definiciones de funciones
 
 
 def is_card_authorized(card_id):
@@ -13,6 +17,3 @@ def is_card_authorized(card_id):
     except FileNotFoundError:
         print("El archivo de autorizaciones no se encuentra.")
         return False
-
-
-
