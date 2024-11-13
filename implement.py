@@ -59,12 +59,23 @@ def registrar_acceso(id_tarjeta, archivo_vinculacion, archivo_log):
   registro = f"{ahora:%Y-%m-%d %H:%M:%S}, {id_tarjeta}, {nombre}, {dni}\n"
 
   # Escribir el registro en el archivo de log
+  print(registro)
   with open(archivo_log, 'a') as f:
     f.write(registro)
 
 
 
 def cargar_ids_desde_csv(archivo_csv):
+  
+    """
+    Carga los IDs de un archivo CSV, asumiendo que el ID está en la primera columna.
+    Args:
+    archivo_csv (str): Ruta al archivo CSV.
+
+    Returns:
+    tuple: Tupla con todos los IDs cargados.
+    """
+  
     ids = []
     with open(archivo_csv, 'r') as csvfile:
         reader = csv.reader(csvfile)
