@@ -7,7 +7,6 @@ RELAY_1_PIN = 5
 SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
 
 
-
 def activate_relay():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(RELAY_1_PIN, GPIO.OUT)

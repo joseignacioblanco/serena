@@ -3,6 +3,8 @@ import time
 from mfrc522 import SimpleMFRC522
 from implement import *
 
+VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
+REGISTER_FILE = "/home/pi/Documents/serena/log_accesos.csv"
 
 lector_1 = SimpleMFRC522()
 
@@ -17,9 +19,10 @@ def loop():
             #lee la tarjeta:
 
             print("Esperando una tarjeta...")
-            card_id = lector_1.read() #asignacion multiple, a text nunca lo usa.
-            registrar_acceso(id_tarjeta, "vinculacion.csv", "log_accesos.txt")
+            card_id, text = lector_1.read() #asignacion multiple, a text lo usa para parsear porque sino mete basura en id.
+            #registrar_acceso(card_id, VINCULATION_FILE, REGISTER_FILE)
             card_id = str(card_id).strip() #strip le saca los espacios y str lo castea a estring
+            registrar_acceso(card_id, VINCULATION_FILE, REGISTER_FILE)
             print(f"Tarjeta leída: {card_id}") #print con formato.
 
             #se fija si esta autorizada
