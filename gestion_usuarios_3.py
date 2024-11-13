@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 import csv
 import os
 from mfrc522 import SimpleMFRC522
