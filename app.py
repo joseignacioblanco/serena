@@ -9,10 +9,6 @@ lector_1 = SimpleMFRC522()
 
 def setup():
     print("Sistema de Control de Acceso Iniciado.")
-    #RELAY_1_PIN = 5
-    #lector_1 = SimpleMFRC522()
-
-
 
 
 def loop():
