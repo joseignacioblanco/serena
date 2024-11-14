@@ -4,20 +4,27 @@ import datetime
 import csv
 
 RELAY_1_PIN = 5
+BUZZER_PIN = 3
 #SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
 VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
 
+autorizado = True
+denegado = False
+
+
+#-------------------------------------------------------------------------------------------
 
 def activate_relay():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(RELAY_1_PIN, GPIO.OUT)
     GPIO.output(RELAY_1_PIN, GPIO.HIGH)
     print("Relé activado - Abriendo puerta")
+    buzzer(autorizado)
     time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
     GPIO.output(RELAY_1_PIN, GPIO.LOW)
     print("Relé desactivado - Cerrando puerta")
 
-
+#-------------------------------------------------------------------------------------------
 
 def is_card_authorized(card_id):
     try:
@@ -30,6 +37,7 @@ def is_card_authorized(card_id):
         return False
 
 
+#-------------------------------------------------------------------------------------------
 
 
 def registrar_acceso(id_tarjeta, archivo_vinculacion, archivo_log):
@@ -63,7 +71,7 @@ def registrar_acceso(id_tarjeta, archivo_vinculacion, archivo_log):
   with open(archivo_log, 'a') as f:
     f.write(registro)
 
-
+#-------------------------------------------------------------------------------------------
 
 def cargar_ids_desde_csv(archivo_csv):
   
@@ -84,3 +92,43 @@ def cargar_ids_desde_csv(archivo_csv):
             id_tarjeta = row[0]
             ids.append(id_tarjeta)
     return tuple(ids)
+
+#-------------------------------------------------------------------------------------------
+
+def buzzer(autorizacion):
+  if autorizacion:
+    print("piiiiiiiiiiiiiiiiiiiiip")
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(BUZZER_PIN, GPIO.OUT)
+    
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    time.sleep(0.1)
+    
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(2)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    #prender buser autorizado piiiiiiiiiiiiiiiip
+  else:
+    print("pip pip pip")
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(BUZZER_PIN, GPIO.OUT)
+    
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    time.sleep(0.2)
+    
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    time.sleep(0.1)
+    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    time.sleep(0.2)
+    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    #prender buser denegado pip pip pip

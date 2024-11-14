@@ -15,6 +15,9 @@ def loop():
             GPIO.setmode(GPIO.BOARD) # Configura el modo numeracion de placa.
             GPIO.setup(RELAY_1_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
             GPIO.output(RELAY_1_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+            
+            GPIO.setup(BUZZER_PIN, GPIO.OUT)
+            GPIO.output(BUZZER_PIN, GPIO.LOW)
 
             #lee la tarjeta:
 
@@ -31,7 +34,7 @@ def loop():
                 activate_relay()  # Activar el relé para abrir la puerta
             else:
                 print("Acceso denegado.")
-                # Aquí puedes agregar lógica para alarmas, etc.
+                buzzer(denegado)
 
             time.sleep(1)  # Retardo para evitar lecturas múltiples rápidas
 
