@@ -14,10 +14,10 @@ def loop():
         try:
             GPIO.setmode(GPIO.BOARD) # Configura el modo numeracion de placa.
             GPIO.setup(RELAY_1_PIN, GPIO.OUT) # configura el relé_pin como salida. esto debe ir al setup
-            GPIO.output(RELAY_1_PIN, GPIO.LOW)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
+            GPIO.output(RELAY_1_PIN, TURN_OFF)  # Asegura que el relé comience apagado, deberia ser normal cerrado.
             
             GPIO.setup(BUZZER_PIN, GPIO.OUT)
-            GPIO.output(BUZZER_PIN, GPIO.LOW)
+            GPIO.output(BUZZER_PIN, TURN_OFF)
 
             #lee la tarjeta:
 

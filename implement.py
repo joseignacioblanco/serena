@@ -3,6 +3,9 @@ import time
 import datetime
 import csv
 
+TURN_ON = GPIO.LOW
+TURN_OFF = GPIO.HIGH
+
 RELAY_1_PIN = 5
 BUZZER_PIN = 3
 #SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
@@ -17,11 +20,11 @@ denegado = False
 def activate_relay():
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(RELAY_1_PIN, GPIO.OUT)
-    GPIO.output(RELAY_1_PIN, GPIO.HIGH)
+    GPIO.output(RELAY_1_PIN, TURN_ON)
     print("Relé activado - Abriendo puerta")
     buzzer(autorizado)
     time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
-    GPIO.output(RELAY_1_PIN, GPIO.LOW)
+    GPIO.output(RELAY_1_PIN, TURN_OFF)
     print("Relé desactivado - Cerrando puerta")
 
 #-------------------------------------------------------------------------------------------
@@ -101,34 +104,34 @@ def buzzer(autorizacion):
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUZZER_PIN, GPIO.OUT)
     
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     time.sleep(0.1)
     
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(2)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     #prender buser autorizado piiiiiiiiiiiiiiiip
   else:
     print("pip pip pip")
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUZZER_PIN, GPIO.OUT)
     
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     time.sleep(0.2)
     
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, GPIO.HIGH)
+    GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.2)
-    GPIO.output(BUZZER_PIN, GPIO.LOW)
+    GPIO.output(BUZZER_PIN, TURN_OFF)
     #prender buser denegado pip pip pip
