@@ -23,7 +23,7 @@ def activate_relay():
     GPIO.output(RELAY_1_PIN, TURN_ON)
     print("Relé activado - Abriendo puerta")
     buzzer(autorizado)
-    time.sleep(2)  # Mantener el relé activado por 5 segundos (ajústalo según sea necesario)
+    time.sleep(2)  # Mantener el relé activado por 4 segundos (porque ya vienen 2 del buser)
     GPIO.output(RELAY_1_PIN, TURN_OFF)
     print("Relé desactivado - Cerrando puerta")
 
@@ -107,7 +107,7 @@ def buzzer(autorizacion):
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
     GPIO.output(BUZZER_PIN, TURN_OFF)
-    time.sleep(0.1)
+    time.sleep(0.3)
     
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(2)
@@ -121,16 +121,14 @@ def buzzer(autorizacion):
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.1)
     GPIO.output(BUZZER_PIN, TURN_OFF)
-    time.sleep(0.2)
+    time.sleep(0.3)
     
-    GPIO.output(BUZZER_PIN, TURN_ON)
-    time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, TURN_OFF)
-    time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, TURN_ON)
-    time.sleep(0.1)
-    GPIO.output(BUZZER_PIN, TURN_OFF)
-    time.sleep(0.1)
+    for i in range(3):
+      GPIO.output(BUZZER_PIN, TURN_ON)
+      time.sleep(0.1)
+      GPIO.output(BUZZER_PIN, TURN_OFF)
+      time.sleep(0.1)
+    
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.2)
     GPIO.output(BUZZER_PIN, TURN_OFF)
