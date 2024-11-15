@@ -6,8 +6,8 @@ import RPi.GPIO as GPIO
 
 #Asociacion de pines en modo BOARD
 MAGNETIC_LOCK_PIN = 7
-BUZZER_PIN = 11 #13, 15, 29, 31, 33, 37
-
+BUZZER_PIN = 11 # 15, 29, 31, 33, 37
+LUZ_VEREDA_PIN = 13
 
 
 
@@ -21,12 +21,12 @@ BOT_TOKEN = '6739139472:AAG4gSZYEWjtjiUdyACO-eL-0u0nhB9dZHM' #este es el bot de 
 
 
 #para el comandito de la biblioteca GPIO
-LOCK = ON = GPIO.HIGH
-UNLOCK = OFF = GPIO.LOW
+LOCK = ON = AUTOMATIC = GPIO.HIGH
+UNLOCK = OFF = MANUAL = GPIO.LOW
 
 #para el diccionario
-BLOQUEADA = PRENDIDO = True
-DESBLOQUEADA = APAGADO = False
+BLOQUEADA = PRENDIDO = MODO_AUTOMATICO = True
+DESBLOQUEADA = APAGADO = MODO_MANUAL = False
 
 
 
@@ -34,15 +34,20 @@ DESBLOQUEADA = APAGADO = False
 GPIO.setmode(GPIO.BOARD)
 
 GPIO.setup(MAGNETIC_LOCK_PIN, GPIO.OUT)  # Pin 7 como salida.
-GPIO.output(MAGNETIC_LOCK_PIN,LOCK)
+GPIO.output(MAGNETIC_LOCK_PIN, LOCK)
 
 GPIO.setup(BUZZER_PIN, GPIO.OUT)  # Pin 11 como salida.
-GPIO.output(BUZZER_PIN,ON)
+GPIO.output(BUZZER_PIN, ON)
+
+GPIO.setup(LUZ_VEREDA_PIN, GPIO.OUT)  # Pin 13 como salida.
+GPIO.output(LUZ_VEREDA_PIN, AUTOMATIC)
+
+
 
 
 
 # Configuracion inicial del diccionario de estados:
-estado_gpio = {MAGNETIC_LOCK_PIN: BLOQUEADA, BUZZER_PIN: PRENDIDO} # Diccionario para almacenar el estado de los GPIO TODO: iniciar todos en False. por ahora uso un diccionario para saber el estado de los pines, cuando sea grande  ya voy a aprender  a leer el estado de los pines con una funcion gpio.rrid o algo asi.
+estado_gpio = {MAGNETIC_LOCK_PIN: BLOQUEADA, BUZZER_PIN: PRENDIDO, LUZ_VEREDA_PIN: MODO_AUTOMATICO} # Diccionario para almacenar el estado de los GPIO TODO: iniciar todos en False. por ahora uso un diccionario para saber el estado de los pines, cuando sea grande  ya voy a aprender  a leer el estado de los pines con una funcion gpio.rrid o algo asi.
 
 #----------------------------------------------------------------------------------------------------
 
@@ -84,6 +89,23 @@ def sin_chicharra(message):
     bot.reply_to(message, "Chicharra Apagada.")
 
 
+# COMANDO LUZ VEEDA AUTOMATIICO
+@bot.message_handler(commands=['luz_vereda_autom', '/luz_vereda_autom@plumistachi_bot'])
+def luz_vereda_autom(message):
+    GPIO.output(LUZ_VEREDA_PIN, AUTOMATIC)
+    estado_gpio[LUZ_VEREDA_PIN] = MODO_AUTOMATICO
+    bot.reply_to(message, "LUZ vereda MODO AUTOMATICO!")
+
+
+# COMANDO LUZ VEREDA MANUAL
+@bot.message_handler(commands=['luz_vereda_manual', '/luz_vereda_manual@plumistachi_bot'])
+def luz_vereda_manual(message):
+    GPIO.output(LUZ_VEREDA_PIN, MANUAL)
+    estado_gpio[LUZ_VEREDA_PIN] = MODO_MANUAL
+    bot.reply_to(message, "LUZ vereda MODO MANUAL.")
+
+
+
 
 
 
@@ -111,13 +133,17 @@ def estado_del_sistema(message):
         bot.reply_to(message, "El buzzer esta apagado.")
 
 
+    if estado_gpio[LUZ_VEREDA_PIN]:
+        bot.reply_to(message, "La luz de la vereda esta en modo AUTOMATICO.")
+    else:
+        bot.reply_to(message, "La luz de la vereda esta en modo MANUAL.")
 
 
 
 # COMANDO AYUDA
 @bot.message_handler(commands=['ayuda','ayuda@plumistachi_bot'])
 def ayuda(message):
-    bot.reply_to(message, 'MENU DE OPCIONES: \n\n' + '🔐 /bloquear_puerta \n' + '🔓 /desbloquear_puerta \n\n' + '🦗 /con_chicharra \n' + '🔇 /sin_chicharra \n\n' + '📊 /estado_del_sistema : Estado general del sistema \n' + '🆘 /ayuda : Muestra este menu')
+    bot.reply_to(message, 'MENU DE OPCIONES: \n\n' + '🔐 /bloquear_puerta \n' + '🔓 /desbloquear_puerta \n\n' + '🦗 /con_chicharra \n' + '🔇 /sin_chicharra \n\n' + '🅰️ /luz_vereda_autom \n' + 'Ⓜ️ /luz_vereda_manual \n\n' + '📊 /estado_del_sistema : Estado general del sistema \n' + '🆘 /ayuda : Muestra este menu')
 
 
 #-----------------------------------------------------------------------------------------------------
