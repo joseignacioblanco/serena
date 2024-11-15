@@ -112,3 +112,14 @@ def maquina_de_estados():
 
 if __name__ == "__main__":
     maquina_de_estados()
+
+'''
+distintos estados
+normal
+estado_servicio basura, mudanzas
+emergencia incendio, temblor, inundacion
+deincuntes violacion de la seguridad
+advertencia maltrato, merodeo
+'''
+
+'''hermanar con el telegram y ver si se pueden hacer interrupciones para que se acople al mein'''
