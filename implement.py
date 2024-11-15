@@ -100,6 +100,7 @@ def cargar_ids_desde_csv(archivo_csv):
 
 def buzzer(autorizacion):
   if autorizacion:
+    #prender buser autorizado piiiiiiiiiiiiiiiip
     print("piiiiiiiiiiiiiiiiiiiiip")
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUZZER_PIN, GPIO.OUT)
@@ -112,8 +113,10 @@ def buzzer(autorizacion):
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(2)
     GPIO.output(BUZZER_PIN, TURN_OFF)
-    #prender buser autorizado piiiiiiiiiiiiiiiip
+    
+    
   else:
+    #prender buser denegado pip pip pip
     print("pip pip pip")
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(BUZZER_PIN, GPIO.OUT)
@@ -132,4 +135,4 @@ def buzzer(autorizacion):
     GPIO.output(BUZZER_PIN, TURN_ON)
     time.sleep(0.2)
     GPIO.output(BUZZER_PIN, TURN_OFF)
-    #prender buser denegado pip pip pip
+    
