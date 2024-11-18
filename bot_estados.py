@@ -9,7 +9,7 @@ MAGNETIC_LOCK_PIN = 7
 BUZZER_PIN = 11
 LUZ_VEREDA_PIN = 13
 REFLECTOR_PIN = 15
-ALARMA_PIN = 29 # disponibles 31, 33, 37
+ALARMA_PIN = 29 # disponibles 37
 
 
 
@@ -66,6 +66,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 # COMANDO BLOQUEAR PUERTA
 @bot.message_handler(commands=['bloquear_puerta', '/bloquear_puerta@plumistachi_bot'])
 def bloquear_puerta(message):
+    GPIO.setup(MAGNETIC_LOCK_PIN, GPIO.OUT)
     GPIO.output(MAGNETIC_LOCK_PIN, LOCK)
     estado_gpio[MAGNETIC_LOCK_PIN] = BLOQUEADA
     bot.reply_to(message, "Puertas Bloqueadas!")
@@ -74,6 +75,7 @@ def bloquear_puerta(message):
 # COMANDO DESBLOQUEAR PUERTA
 @bot.message_handler(commands=['desbloquear_puerta', '/desbloquear_puerta@plumistachi_bot'])
 def desbloquear_puerta(message):
+    GPIO.setup(MAGNETIC_LOCK_PIN, GPIO.OUT)
     GPIO.output(MAGNETIC_LOCK_PIN, UNLOCK)
     estado_gpio[MAGNETIC_LOCK_PIN] = DESBLOQUEADA
     bot.reply_to(message, "Puertas Desbloqueadas.")
@@ -82,6 +84,7 @@ def desbloquear_puerta(message):
 # COMANDO CON CHICHARRA
 @bot.message_handler(commands=['con_chicharra', '/con_chicharra@plumistachi_bot'])
 def con_chicharra(message):
+    GPIO.setup(BUZZER_PIN, GPIO.OUT)
     GPIO.output(BUZZER_PIN, ON)
     estado_gpio[BUZZER_PIN] = PRENDIDO
     bot.reply_to(message, "Chicharra Prendida!")
@@ -90,6 +93,7 @@ def con_chicharra(message):
 # COMANDO SIN CHICHARRA
 @bot.message_handler(commands=['sin_chicharra', '/sin_chicharra@plumistachi_bot'])
 def sin_chicharra(message):
+    GPIO.setup(BUZZER_PIN, GPIO.OUT)
     GPIO.output(BUZZER_PIN, OFF)
     estado_gpio[BUZZER_PIN] = APAGADO
     bot.reply_to(message, "Chicharra Apagada.")
@@ -98,6 +102,7 @@ def sin_chicharra(message):
 # COMANDO LUZ VEEDA AUTOMATIICO
 @bot.message_handler(commands=['luz_vereda_autom', '/luz_vereda_autom@plumistachi_bot'])
 def luz_vereda_autom(message):
+    GPIO.setup(LUZ_VEREDA_PIN, GPIO.OUT)
     GPIO.output(LUZ_VEREDA_PIN, AUTOMATIC)
     estado_gpio[LUZ_VEREDA_PIN] = MODO_AUTOMATICO
     bot.reply_to(message, "LUZ vereda MODO AUTOMATICO!")
@@ -106,6 +111,7 @@ def luz_vereda_autom(message):
 # COMANDO LUZ VEREDA MANUAL
 @bot.message_handler(commands=['luz_vereda_manual', '/luz_vereda_manual@plumistachi_bot'])
 def luz_vereda_manual(message):
+    GPIO.setup(LUZ_VEREDA_PIN, GPIO.OUT)
     GPIO.output(LUZ_VEREDA_PIN, MANUAL)
     estado_gpio[LUZ_VEREDA_PIN] = MODO_MANUAL
     bot.reply_to(message, "LUZ vereda MODO MANUAL.")
@@ -114,6 +120,7 @@ def luz_vereda_manual(message):
 # COMANDO REFLECTOR PRENDER
 @bot.message_handler(commands=['reflector_prender', '/reflector_prender@plumistachi_bot'])
 def reflector_prender(message):
+    GPIO.setup(REFLECTOR_PIN, GPIO.OUT)
     GPIO.output(REFLECTOR_PIN, ON)
     estado_gpio[REFLECTOR_PIN] = PRENDIDO
     bot.reply_to(message, "REFLECTOR PRENDIDO!")
@@ -122,6 +129,7 @@ def reflector_prender(message):
 # COMANDO REFLECTOR APAGAR
 @bot.message_handler(commands=['reflector_apagar', '/reflector_apagar@plumistachi_bot'])
 def reflector_apagar(message):
+    GPIO.setup(REFLECTOR_PIN, GPIO.OUT)
     GPIO.output(REFLECTOR_PIN, OFF)
     estado_gpio[REFLECTOR_PIN] = APAGADO
     bot.reply_to(message, "REFLECTOR APAGADO!")
@@ -130,6 +138,7 @@ def reflector_apagar(message):
 # COMANDO ALARMA PRENDER
 @bot.message_handler(commands=['alarma_prender', '/alarma_prender@plumistachi_bot'])
 def alarma_prender(message):
+    GPIO.setup(ALARMA_PIN, GPIO.OUT)
     GPIO.output(ALARMA_PIN, ON)
     estado_gpio[ALARMA_PIN] = PRENDIDO
     bot.reply_to(message, "ALARMA ENCENDIDA!!!")
@@ -138,6 +147,7 @@ def alarma_prender(message):
 # COMANDO ALARMA APAGAR
 @bot.message_handler(commands=['alarma_apagar', '/alarma_apagar@plumistachi_bot'])
 def alarma_apagar(message):
+    GPIO.setup(ALARMA_PIN, GPIO.OUT)
     GPIO.output(ALARMA_PIN, OFF)
     estado_gpio[ALARMA_PIN] = APAGADO
     bot.reply_to(message, "ALARMA APAGADA.")
@@ -201,7 +211,7 @@ def ayuda(message):
 
 
 # Ejecuta el bot
-def main():
+def bat():
     try:
         
         bot.polling()
@@ -216,5 +226,5 @@ def main():
        
         
 if __name__ == "__main__":
-    main()
+    bat()
     
