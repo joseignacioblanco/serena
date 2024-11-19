@@ -52,7 +52,7 @@ def estado_espera():
         print("MACHINE: ESTADO INTRUSO")
         estado_actual = "INTRUSO"
     
-    elif ((bot_estados.estado_gpio[BUZZER_PIN] == bot_estados.APAGADO) and (bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA)):
+    elif ((bot_estados.estado_gpio[BUZZER_PIN] == bot_estados.APAGADO) or (bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA)):
         print("MACHINE: ESTADO MODO DE SERVICIO.")
         estado_actual = "SERVICIO"
     

@@ -1,4 +1,4 @@
-#! /ust/bin/python3
+#! /usr/bin/python3
 #TODO: todo esto luego iria a serena_main o sino lo reemplaza.
 
 import threading
