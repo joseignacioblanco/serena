@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import datetime
 import csv
+import state_machine
 
 TURN_ON = GPIO.LOW
 TURN_OFF = GPIO.HIGH
@@ -15,6 +16,16 @@ autorizado = True
 denegado = False
 
 
+#DICCIONARIO PARA CONTROL DE ESTADOS---------------------------------------------------------
+#Asociacion de pines en modo BOARD
+MAGNETIC_LOCK_PIN = 7
+#para el diccionario
+BLOQUEADA = True
+DESBLOQUEADA = False
+#diccionario de estados inicializacion
+estado_gpio = {MAGNETIC_LOCK_PIN: BLOQUEADA}
+
+
 #-------------------------------------------------------------------------------------------
 
 def activate_relay():
@@ -22,10 +33,12 @@ def activate_relay():
     GPIO.setup(RELAY_1_PIN, GPIO.OUT)
     GPIO.output(RELAY_1_PIN, TURN_ON)
     print("Relé activado - Abriendo puerta")
+    estado_gpio[MAGNETIC_LOCK_PIN] = DESBLOQUEADA
     buzzer(autorizado)
     time.sleep(2)  # Mantener el relé activado por 4 segundos (porque ya vienen 2 del buser)
     GPIO.output(RELAY_1_PIN, TURN_OFF)
     print("Relé desactivado - Cerrando puerta")
+    estado_gpio[MAGNETIC_LOCK_PIN] = BLOQUEADA
 
 #-------------------------------------------------------------------------------------------
 
@@ -136,3 +149,20 @@ def buzzer(autorizacion):
     time.sleep(0.2)
     GPIO.output(BUZZER_PIN, TURN_OFF)
     
+    
+    
+    #----------------------------------------------------------------------------
+    
+    
+def chicharra():
+    while(state_machine.verificar_sensor_puerta() == True):
+        #prender buser autorizado piiiiiiiiiiiiiiiip
+        print("pip \n")
+        print(state_machine.verificar_sensor_puerta)
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(BUZZER_PIN, GPIO.OUT)
+    
+        GPIO.output(BUZZER_PIN, TURN_ON)
+        time.sleep(0.7)
+        GPIO.output(BUZZER_PIN, TURN_OFF)
+        time.sleep(0.5)

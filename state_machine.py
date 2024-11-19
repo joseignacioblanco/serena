@@ -2,13 +2,16 @@
 
 import time
 import RPi.GPIO as GPIO
-
+import implement
+import bot_estados
 
 # Configuración de pines GPIO (ejemplo de pines; ajusta según tu configuración)
 BUZZER_PIN = 11
 SENSOR_PUERTA_PIN = 31
 SENSOR_VIBRACION_PIN = 33
 MAGNETIC_LOCK_PIN = 7
+ALARMA_PIN = 29
+ALARMA2_PIN = 37
 
 # Configuración GPIO
 GPIO.setmode(GPIO.BOARD)
@@ -30,28 +33,49 @@ estado_actual = "ESPERA"
 
 def verificar_sensor_puerta():
     """Verifica si la puerta está abierta."""
-    return GPIO.input(PIN_SENSOR_PUERTA)
+    return GPIO.input(SENSOR_PUERTA_PIN)
 
 def verificar_sensor_vibracion():
     """Verifica si hay vibración detectada (puerta forzada)."""
-    return GPIO.input(PIN_SENSOR_VIBRACION)
+    return GPIO.input(SENSOR_VIBRACION_PIN)
 
 
 #-----------------------------------------------------------------------------------------------
 
 def estado_espera():
-    """Estado inicial en espera de un usuario con tarjeta."""
+    #Estado inicial en espera de un usuario con tarjeta.
     global estado_actual
-    print("Estado: ESPERA. Esperando tarjeta...")
-    if :
-        print(f"Acceso autorizado para {usuarios_autorizados[card_id]}")
-        estado_actual = "PUERTA_ABIERTA"
-    elif card_id == "111111":  # Ejemplo de tarjeta maestra para servicio/mudanza
-        print("Tarjeta maestra detectada. Modo de servicio activado.")
+    print("MACHINE: ESPERA. Esperando tarjeta...")
+    
+    
+    if (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.BLOQUEADA) and (verificar_sensor_puerta()):
+        print("MACHINE: ESTADO INTRUSO")
+        estado_actual = "INTRUSO"
+    
+    elif ((bot_estados.estado_gpio[BUZZER_PIN] == bot_estados.APAGADO) and (bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA)):
+        print("MACHINE: ESTADO MODO DE SERVICIO.")
         estado_actual = "SERVICIO"
+    
+    elif (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.DESBLOQUEADA or bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA):
+        print("MACHINE: ESTADO ABRIENDO PUERTA")
+        estado_actual = "ABRIENDO"
+    
+    
+    elif verificar_sensor_puerta():
+        print("MACHINE: ESTADO PUERTA ABIERTA CHICHARRIANDO")
+        estado_actual = "PUERTA_ABIERTA"
+    
+    
+        
+    elif verificar_sensor_vibracion():
+        print("MACHINE: ESTADO ADVERTENCIA")
+        estado_actual = "ADVERTENCIA"
+        
+    
+        
     else:
-        print("Acceso denegado.")
-        activar_buzzer()
+        print("MACHINE: ESTADO ESPERA")
+        estado_actual = "ESPERA"
 
 
 
@@ -64,11 +88,99 @@ def estado_espera():
 
 
 
+def estado_abriendo():
+    #Estado abriendo esperando que abran la puerta porque ya le dieron acceso.
+    global estado_actual
+    print("MACHINE: ABRIENDO")
+    
+    if verificar_sensor_puerta():
+        time.sleep(4)
+        print("MACHINE: ESTADO CHICHARRA DE PUERTA ABIERTA")
+        estado_actual = "PUERTA_ABIERTA"
+    
+    elif (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.BLOQUEADA) and (not verificar_sensor_puerta()):
+        print("MACHINE: MODO ESPERA.")
+        estado_actual = "ESPERA"
+    else:
+        print("...")
+        estado_actual = "ABRIENDO"
+        
 
 
 
 
 
+
+def estado_puerta_abierta():
+    #Estado puerta abierta y sonando la chicharra.
+    global estado_actual
+    print("MACHINE: PUERTA ABIERTA Y CHICHARRIANDO")
+    
+    if not verificar_sensor_puerta():
+        print("MACHINE: ESTADO ESPERA")
+        estado_actual = "ESPERA"
+    
+    else:
+        print("CHICHARRIANDO...")
+        implement.chicharra()
+        estado_actual = "PUERTA_ABIERTA"
+
+
+
+
+
+
+def estado_servicio():
+    #Estado servicio para mudanzas y basura.
+    global estado_actual
+    print("MACHINE: ESTADO DE SERVICIO")
+    
+    if bot_estados.estado_gpio[BUZZER_PIN] == bot_estados.PRENDIDO and bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.BLOQUEADA:
+        print("MACHINE: ESTADO ESPERA")
+        estado_actual = "ESPERA"
+    
+    else:
+        print("MACHINE: ESTADO DE SERVICIO")
+        estado_actual = "SERVICIO"
+
+
+
+
+
+
+def estado_advertencia():
+    #Estado de advertencia por maltrato.
+    global estado_actual
+    print("MACHINE: ESTADO ADVERTENCIA")
+    
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(ALARMA_PIN, GPIO.OUT)
+    GPIO.output(ALARMA_PIN, implement.TURN_ON)
+    time.sleep(1)
+    GPIO.output(ALARMA_PIN, implement.TURN_OFF)
+    estado_actual = "ESPERA"
+    
+    
+    
+    
+def estado_intruso():
+    #Estado intruso abrio la puerta sin autorizacion.
+    global estado_actual
+    print("MACHINE: ESTADO INTRUSO IN")
+    
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(ALARMA2_PIN, GPIO.OUT)
+    GPIO.output(ALARMA2_PIN, implement.TURN_ON)
+    print("prende alarma intruso")
+    time.sleep(5)
+    GPIO.output(ALARMA2_PIN, implement.TURN_OFF)
+    print("apaga alarma intruso")
+    estado_actual = "ESPERA"
+    
+    
+    
+    
+    
 
 #-------------------------------------------------------------------------------------------------------
 
@@ -96,9 +208,6 @@ def maquina_de_estados():
             elif estado_actual == "INTRUSO":
                 estado_intruso()
             
-            # Verificar condiciones para detección de intrusos TODO:
-            if verificar_sensor_vibracion() and not verificar_sensor_puerta():
-                estado_actual = "INTRUSO"
             time.sleep(1)
     
     except KeyboardInterrupt:
@@ -109,5 +218,5 @@ def maquina_de_estados():
 
 
 
-if __name__ == "__main__":
-    maquina_de_estados()
+#if __name__ == "__main__":
+#    maquina_de_estados()

@@ -9,7 +9,8 @@ MAGNETIC_LOCK_PIN = 7
 BUZZER_PIN = 11
 LUZ_VEREDA_PIN = 13
 REFLECTOR_PIN = 15
-ALARMA_PIN = 29 # disponibles 37
+ALARMA_PIN = 29
+ALARMA2_PIN = 37
 
 
 
@@ -211,7 +212,7 @@ def ayuda(message):
 
 
 # Ejecuta el bot
-def bat():
+def bat(): #le cambio el nombre de bot a bat poque sino hay conflicto con las bibliotecas del bot me parece...
     try:
         
         bot.polling()

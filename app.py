@@ -41,5 +41,5 @@ def loop():
         except KeyboardInterrupt:
             print("\nSaliendo del sistema.")
             break
-        #finally: #si le pongo esto, se tranga cuando anda el simultaneo con el bot y ademas reinicia la setiada de estados del bot. por eso lo sacamos
-            #GPIO.cleanup()
+#        finally: #si le pongo esto, se tranga cuando anda el simultaneo con el bot y ademas reinicia la setiada de estados del bot. por eso lo sacamos
+#            GPIO.cleanup()
