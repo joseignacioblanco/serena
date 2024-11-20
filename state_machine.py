@@ -25,6 +25,7 @@ GPIO.setup(MAGNETIC_LOCK_PIN, GPIO.OUT)
 
 # Variables globales
 estado_actual = "ESPERA"
+flag = False
 #usuarios_autorizados = {"123456": "Usuario 1", "654321": "Usuario 2"}  # Diccionario de ejemplo
 
 # Funciones auxiliares
@@ -44,17 +45,18 @@ def verificar_sensor_vibracion():
 
 def estado_espera():
     #Estado inicial en espera de un usuario con tarjeta.
-    global estado_actual
+    global estado_actual, flag
     print("MACHINE: ESPERA. Esperando tarjeta...")
     
     
-    if (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.BLOQUEADA) and (verificar_sensor_puerta()):
+    if (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.BLOQUEADA) and (verificar_sensor_puerta()) and flag == False:
         print("MACHINE: ESTADO INTRUSO")
         estado_actual = "INTRUSO"
     
     elif ((bot_estados.estado_gpio[BUZZER_PIN] == bot_estados.APAGADO) or (bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA)):
         print("MACHINE: ESTADO MODO DE SERVICIO.")
         estado_actual = "SERVICIO"
+        flag = True
     
     elif (implement.estado_gpio[MAGNETIC_LOCK_PIN] == implement.DESBLOQUEADA or bot_estados.estado_gpio[MAGNETIC_LOCK_PIN] == bot_estados.DESBLOQUEADA):
         print("MACHINE: ESTADO ABRIENDO PUERTA")
@@ -76,6 +78,9 @@ def estado_espera():
     else:
         print("MACHINE: ESTADO ESPERA")
         estado_actual = "ESPERA"
+        if not verificar_sensor_puerta():
+            flag = False #para que pueda volver a entrar al estado intruso porque sino de servicio se pasaba a intruso y era mejor que se quede en espera hasta que se cierre la puerta
+            
 
 
 
@@ -176,7 +181,6 @@ def estado_intruso():
     GPIO.output(ALARMA2_PIN, implement.TURN_OFF)
     print("apaga alarma intruso")
     estado_actual = "ESPERA"
-    
     
     
     
