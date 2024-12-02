@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 # Este es el shebang para que se ejecute como script de python.
 # no puede haber nada mas en a primera linea sino no anda.
-
+'''Este archivo serena_main era para tener un punto de entrada a la aplicacion de control de acceso
+supuestamente ya estaria obsoleto siendo que el archivo de multihilos prueba de hilos lo reeplaza para
+poder hacer andar todos los programas en simultaneo'''
 
 #------------------------------ PROYECTO SERENA 9/NOV/2024 --------------------------
 # AUTOR: JOSE BLANCO.

@@ -1,5 +1,11 @@
 #! /usr/bin/python3
 
+
+''' este archivito lo que hace es manejar todo el bot de telegram para el programa de domotica chiringo
+es un programa autonomo y tenia ejecucion propia pero luego se integra a prueba de hilos y funciona 
+en paralelo con la maquina de estados y el control de acceso'''
+
+
 import telebot
 import RPi.GPIO as GPIO
 

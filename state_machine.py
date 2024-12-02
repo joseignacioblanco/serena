@@ -1,5 +1,11 @@
 #! /usr/bin/python3
 
+
+''' Aqui esta la maquina de estados que le dice al programa en cada momento como es la situacion y va integrando
+las demas funciones segun el estado en que se encuentre.'''
+
+
+
 import time
 import RPi.GPIO as GPIO
 import implement
