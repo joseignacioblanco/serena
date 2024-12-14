@@ -1,6 +1,11 @@
 #! /usr/bin/python3
 #TODO: todo esto luego iria a serena_main o sino lo reemplaza.
 
+'''prueba de hilos es una entrada al programa general donde manda a correr las tres aplicaciones principales
+que seria la de la maquina de estados, la del bot de telegram y la aplicacion de control de acceso en si.
+En este caso esta reemplazzando el serena_main que era el punto de entrada a la app de control de acceso y
+ademas incorpora como digimos los otros dos programas en forma paralela mediante multihilos'''
+
 import threading
 import app
 import state_machine

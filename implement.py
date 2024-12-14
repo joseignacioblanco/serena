@@ -1,3 +1,7 @@
+'''Este archivito contiene toda la implementacion para el control de acceso puramente, aqui
+estan todas las funciones auxiliares que hacen andar la app.py'''
+
+
 import RPi.GPIO as GPIO
 import time
 import datetime

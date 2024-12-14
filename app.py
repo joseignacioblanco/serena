@@ -1,3 +1,9 @@
+'''Esta aplicacion junto con implement.py me manejarian todo lo que es el control de acceso de rfid
+despues, lo que es la maquina de estados y el bot va por aparte.'''
+
+
+
+
 import RPi.GPIO as GPIO
 import time
 from mfrc522 import SimpleMFRC522

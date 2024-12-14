@@ -1,5 +1,11 @@
 #! /usr/bin/python3
 
+
+''' este archivito lo que hace es manejar todo el bot de telegram para el programa de domotica chiringo
+es un programa autonomo y tenia ejecucion propia pero luego se integra a prueba de hilos y funciona 
+en paralelo con la maquina de estados y el control de acceso'''
+
+
 import telebot
 import RPi.GPIO as GPIO
 
@@ -24,8 +30,8 @@ BOT_TOKEN = '6739139472:AAG4gSZYEWjtjiUdyACO-eL-0u0nhB9dZHM' #este es el bot de 
 
 
 #para el comandito de la biblioteca GPIO
-LOCK = ON = AUTOMATIC = GPIO.HIGH
-UNLOCK = OFF = MANUAL = GPIO.LOW
+LOCK = OFF = AUTOMATIC = GPIO.HIGH
+UNLOCK = ON = MANUAL = GPIO.LOW
 
 #para el diccionario
 BLOQUEADA = PRENDIDO = MODO_AUTOMATICO = True
@@ -46,7 +52,7 @@ GPIO.setup(LUZ_VEREDA_PIN, GPIO.OUT)  # Pin 13 como salida.
 GPIO.output(LUZ_VEREDA_PIN, AUTOMATIC)
 
 GPIO.setup(REFLECTOR_PIN, GPIO.OUT)  # Pin 15 como salida.
-GPIO.output(REFLECTOR_PIN, OFF)
+GPIO.output(REFLECTOR_PIN, OFF) 
 
 GPIO.setup(ALARMA_PIN, GPIO.OUT)  # Pin 29 como salida.
 GPIO.output(ALARMA_PIN, OFF)

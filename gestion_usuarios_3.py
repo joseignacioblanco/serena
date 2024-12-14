@@ -1,5 +1,12 @@
 #! /usr/bin/python3
 
+
+'''este si que si va ser un programa aparte y no va a correr junto con los demas, por ahora, hasta que
+por lo menos en la maquina de estados pueda agregar un estado de registro para que momentaneamente 
+pase a un modo de "registro" y que no interfiera con el lector para poder andar el control de acceso'''
+
+
+
 import csv
 import os
 from mfrc522 import SimpleMFRC522
