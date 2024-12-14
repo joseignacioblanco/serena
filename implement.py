@@ -14,7 +14,7 @@ TURN_OFF = GPIO.HIGH
 RELAY_1_PIN = 5
 BUZZER_PIN = 3
 #SD_FILE_PATH = "/home/pi/Documents/serena/autorized_cards.txt"
-VINCULATION_FILE = "/home/pi/Documents/serena/vinculacion.csv"
+VINCULATION_FILE = "/home/pi3/Documents/serena/vinculacion.csv"
 
 autorizado = True
 denegado = False
