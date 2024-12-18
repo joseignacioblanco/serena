@@ -10,6 +10,7 @@ import time
 import RPi.GPIO as GPIO
 import implement
 import bot_estados
+import datetime
 
 # Configuración de pines GPIO (ejemplo de pines; ajusta según tu configuración)
 BUZZER_PIN = 11
@@ -219,6 +220,10 @@ def maquina_de_estados():
                 estado_intruso()
             
             time.sleep(1)
+            #print("---------------------------------------------")            
+            print(datetime.datetime.now())
+            print("---------------------------------------------")
+
     
     except KeyboardInterrupt:
         print("\nSistema detenido por el usuario.")
