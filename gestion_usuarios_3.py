@@ -11,7 +11,7 @@ import csv
 import os
 from mfrc522 import SimpleMFRC522
 
-CSV_FILE = "/home/pi/Documents/serena/vinculacion.csv"
+CSV_FILE = "/home/pi3/Documents/serena/vinculacion.csv"
 
 lector_1 = SimpleMFRC522()
 
